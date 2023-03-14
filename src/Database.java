@@ -1,19 +1,50 @@
 import java.sql.*;
 
 public class Database {
+    private String url;
+    private String port;
+    private String db;
+    private String username;
+    private String passwd;
+    private Connection con;
 
-    public static void main(String args[]){
-        try{
+    public Database(String url, String port, String db,
+                    String username, String passwd) {
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+        }
+        catch(Exception e){ System.out.println(e);}
 
-            Connection con=DriverManager.getConnection(
-                    "jdbc:mysql://db4free.net:3306/oopjan23utp","nordin","n00Pdinutp"); //3306 - port number
-//here sonoo is database name, root is username and password
-            Statement stmt=con.createStatement();
-            ResultSet rs=stmt.executeQuery("select * from Student");
-            while(rs.next())
-                System.out.println(rs.getString(1));
-            con.close();
-        }catch(Exception e){ System.out.println(e);}
+        // assign attributes
     }
+
+    public void connect() {
+        // change string to attribute
+        try {
+            con = DriverManager.getConnection(
+                    this.url + ":" +this.port+"/"+this.db,
+                    this.username, this.passwd);
+        }
+        catch(Exception e){ System.out.println(e);}
+
+    }
+
+    public void runQuery(String query) {
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from Student");
+            while (rs.next())
+                System.out.println(rs.getString(1));
+        }
+        catch(Exception e){ System.out.println(e);}
+
+    }
+
+    public void close() {
+        try {
+            con.close();
+        }
+        catch(Exception e){ System.out.println(e);}
+    }
+
 }
